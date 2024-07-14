@@ -91,7 +91,7 @@ const App = () => {
           {successful &&
             <div className="min-h-full min-w-full flex items-center justify-center gap-4 p-4 bg-white dark:bg-neutral-800 border-l-8 border-sky-500 rounded shadow-md">
               <div className="min-w-full flex items-center justify-between gap-4">
-                <input type="text" readOnly value={shortened} className={`text-xl dark:text-neutral-400 p-3 ${coppied ? "dark:text-neutral-800 bg-emerald-200 border-emerald-400" : "bg-stone-100 dark:bg-neutral-800 border-neutral-300"} border rounded focus:outline-none w-full`} />
+                <input type="text" readOnly value={shortened.replace("https://", "")} className={`text-xl dark:text-neutral-400 p-3 ${coppied ? "dark:text-neutral-800 bg-emerald-200 border-emerald-400" : "bg-stone-100 dark:bg-neutral-800 border-neutral-300"} border rounded focus:outline-none w-full`} />
                 <button onClick={() => { navigator.clipboard.writeText(shortened), copy() }} className="outline-emerald-600 p-3 bg-emerald-400 border-2 border-green-400 text-xl text-white font-medium rounded active:relative active:top-1 hover:saturate-150">Copiar</button>
               </div>
             </div>
