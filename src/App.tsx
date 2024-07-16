@@ -10,8 +10,32 @@ const App = () => {
 
   const toggle = () => { setDarkMode(!darkMode), localStorage.setItem("darkMode", String(!darkMode)); };
 
+  type Analytics = {
+    totalVisitorCount: number,
+    totalLinkCount: number,
+    monthlyVisitorCount: number,
+    monthlyLinkCount: number,
+    dailyVisitorCount: number,
+    dailyLinkCount: number
+  }
+
+  const [analytics, setAnalytics] = useState<Analytics>({
+    "totalVisitorCount": 0,
+    "totalLinkCount": 0,
+    "monthlyVisitorCount": 0,
+    "monthlyLinkCount": 0,
+    "dailyVisitorCount": 0,
+    "dailyLinkCount": 0
+  });
+
   useEffect(() => {
+
     if (localStorage.getItem("darkMode") !== null) setDarkMode(localStorage.getItem("darkMode") === "true");
+
+    axios.get(`${import.meta.env.VITE_API}/analytics`)
+      .then(response => setAnalytics(response.data))
+      .catch(() => { return })
+
   }, []);
 
   type Data = { url: string }
@@ -60,23 +84,23 @@ const App = () => {
   }
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
+    <div className={`${darkMode ? "dark" : ""} relative`}>
       {darkMode ?
         <div onClick={toggle} className="cursor-pointer absolute top-5 max-[640px]:top-auto max-[640px]:bottom-5 left-5 w-14 h-14 rounded-full bg-stone-100 flex items-center justify-center text-center text-black text-3xl"><FaSun /></div>
         :
         <div onClick={toggle} className="cursor-pointer absolute top-5 max-[640px]:top-auto max-[640px]:bottom-5 left-5 w-14 h-14 rounded-full bg-neutral-900 flex items-center justify-center text-center text-white text-3xl"><FaMoon /></div>
       }
-      <div className="bg-stone-100 dark:bg-neutral-900 lg:h-lvh sm:h-svh max-[640px]:h-svh">
+      <div className="bg-stone-100 dark:bg-neutral-900 lg:min-h-lvh sm:min-h-svh max-[640px]:min-h-svh flex flex-col items-center justify-between pb-32">
         <div className="flex flex-col items-center py-5 cursor-default select-none">
           <h1 className="text-5xl text-sky-500 border-b border-sky-500 font-semibold">Confia, pô!</h1>
           <p className="text-base text-neutral-600 dark:text-neutral-300 font-semibold text-center">eu ia mentir pra quê?</p>
         </div>
-        <div className="max-w-3xl w-full h-40 p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="max-w-3xl w-full h-40 p-4">
           {!requesting && !successful &&
             <div className="flex flex-col gap-2">
               <h2 className="text-3xl text-neutral-600 dark:text-neutral-300">Encurte seu link:</h2>
               <form onSubmit={handleSubmit} className="flex justify-between gap-4">
-                <input type="text" placeholder="https://lucasadm.onrender.com" value={data.url} onChange={handleChange} required className="text-xl dark:text-neutral-400 p-3 border dark:bg-neutral-800 placeholder-neutral-400 focus:placeholder-white dark:placeholder-neutral-600 dark:focus:placeholder-neutral-800 border-neutral-300 rounded focus:outline-none focus:border-sky-500 w-full" />
+                <input type="text" placeholder="https://" value={data.url} onChange={handleChange} required className="text-xl dark:text-neutral-400 p-3 border dark:bg-neutral-800 placeholder-neutral-400 focus:placeholder-white dark:placeholder-neutral-600 dark:focus:placeholder-neutral-800 border-neutral-300 rounded focus:outline-none focus:border-sky-500 w-full" />
                 <button className="p-3 bg-sky-400 border-2 border-blue-400 text-xl text-white font-medium rounded active:relative active:top-1 hover:saturate-200">Encurtar</button>
               </form>
               <p className="text-xl text-red-400">{error.url}</p>
@@ -96,6 +120,53 @@ const App = () => {
               </div>
             </div>
           }
+        </div>
+        <div className="max-w-7xl w-full max-[640px]:max-w-sm grid grid-cols-3 max-[640px]:grid-cols-1 items-center gap-12 px-8">
+          <div className="flex flex-col items-center gap-4 px-2 py-4 bg-white dark:bg-neutral-700 border-l-8 border-sky-500 rounded shadow-md">
+            <div>
+              <h2 className="text-neutral-600 dark:text-neutral-100 font-semibold">TOTAL</h2>
+            </div>
+            <div className="w-full flex items-center justify-around gap-4">
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.totalLinkCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Links</p>
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.totalVisitorCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Visitas</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-4 px-2 py-4 bg-white dark:bg-neutral-700 border-l-8 border-sky-500 rounded shadow-md">
+            <div>
+              <h2 className="text-neutral-600 dark:text-neutral-100 font-semibold">ESTE MÊS</h2>
+            </div>
+            <div className="w-full flex items-center justify-around gap-4">
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.monthlyLinkCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Links</p>
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.monthlyVisitorCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Visitas</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-4 px-2 py-4 bg-white dark:bg-neutral-700 border-l-8 border-sky-500 rounded shadow-md">
+            <div>
+              <h2 className="text-neutral-600 dark:text-neutral-100 font-semibold">HOJE</h2>
+            </div>
+            <div className="w-full flex items-center justify-around gap-4">
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.dailyLinkCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Links</p>
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl text-neutral-600 dark:text-neutral-100">{analytics?.dailyVisitorCount}</h3>
+                <p className="text-base text-neutral-600 dark:text-neutral-100">Visitas</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
