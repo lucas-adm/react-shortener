@@ -1,4 +1,4 @@
-<h3 align="center">Confia, pô!</h3>
+<h3 align="center">XYZ</h3>
 
 <br>
 
@@ -16,12 +16,14 @@
 
 ### Como cortar sua URL ⁉
 
-#### ▶ Realize o corte *<a href="https://confiapo.onrender.com">aqui</a>*
+#### ▶ Realize o corte *<a href="https://www.xisyz.xyz">aqui</a>*
+
+#### 👨🏻‍💻 <a href="https://github.com/lucas-adm/springboot-shortener">*Back-End*</a>
 
 ###### Banco de Dados e Server Deploy por <a href="https://render.com">*Render*</a>
 
 <div align="center">
 
-![confiapo](https://github.com/user-attachments/assets/24689a1d-89d7-44ae-a9e3-2208ef815ee0)
+![xyz](https://github.com/user-attachments/assets/8048d759-7c98-450e-aec8-899a10555e82)
 
 </div>
